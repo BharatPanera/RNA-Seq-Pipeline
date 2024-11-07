@@ -1,16 +1,12 @@
 process qc_raw_fastq {
     input:
-    path fastq
+    path fastq_files from params.fastq
+
     output:
-    path "${params.fastqc_reports}/${fastq.baseName}_fastqc.html"
-    path "${params.trimmed_dir}/${fastq.baseName}_trimmed.fastq"
+    path "${params.fastqc_reports}/fastqc_report_*.html"
 
     script:
     """
-    # Run FASTQC
-    fastqc ${fastq} -o ${params.fastqc_reports}
-    
-    # Run Trimmomatic
-    trimmomatic PE ${fastq} ${fastq.baseName}_trimmed.fastq ILLUMINACLIP:${params.adapter_file}:2:30:10
+    fastqc -o ${params.fastqc_reports} $fastq_files
     """
 }
